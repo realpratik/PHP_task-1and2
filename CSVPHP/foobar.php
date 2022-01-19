@@ -20,17 +20,24 @@ regarding the requirements and deliverables of this task. Questions on “how to
 be accepted.
 
 
-
 https://github.com/realpratik/PHP_task-1and2.git
 
+
+//to execute the file on command line
+php -f foobar.php
+
+
+
 -->
+
+
+
+
 
 
 <?php
 
 for($i=1;$i<=100;$i++){
-  //echo $i;
-  
   if($i%3==0 && $i%5==0){
     echo "foobar";
     echo "</br>";
@@ -44,7 +51,7 @@ for($i=1;$i<=100;$i++){
     echo $i;
     // $i++;
     echo "</br>";
-}
+  }
 }
 
 

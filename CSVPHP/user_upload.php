@@ -8,6 +8,9 @@ Create a PHP script, that is executed from the command line, which accepts a CSV
  as input (see command line directives below) and processes the CSV file. The parsed file
   data is to be inserted into a MySQL database. A CSV file is provided as part of this task 
   that contains test data, the script must be able to process this file appropriately.
+
+
+
 The PHP script will need to correctly handle the following criteria:
 • CSV file will contain user data and have three columns: name, surname, email (see table 
 definition below)
@@ -82,3 +85,71 @@ https://github.com/realpratik/PHP_task-1and2.git
 
 
 -->
+
+
+
+
+
+
+
+    <!-- // $filename = 'users.csv';
+    // $data = [];
+
+    // // open the file
+    // $f = fopen($filename, 'r');
+
+    // if ($f === false) {
+    //   die('Cannot open the file ' . $filename);
+    // }
+
+    // // read each line in CSV file at a time
+    // while (($row = fgetcsv($f)) !== false) {
+    //   $data[] = $row;
+    // }
+
+    // // close the file
+    // // fclose($f); -->
+ 
+
+
+
+    <form action="" method="post" enctype="multipart/form-data">
+  Upload File:
+  <input type="file" name="f1">
+  <br><br>
+  <input type="submit" name="submit">
+</form>
+
+  <?php
+  //   // $csv = '/Users/Project2021/Sites/CSVPHP/users.csv';
+  
+
+
+    if($_POST){
+      $tmp = $_FILES['f1']['tmp_name'];//Temporay array['filename']['keyword']
+      $actual = $_FILES['f1']['name'];// Actual array
+    
+      $type = $_FILE['f1']['type'];
+    
+      if($type=="csv"){
+        $folder = "uploads/"; //Defining folder
+        $merge = $folder.$actual; //merge 
+        move_uploaded_file($tmp, $merge);//move uplaoded file
+        echo "Image uploaded successfully";
+      } else {
+        echo "Incorrect format";
+      }
+    
+         $csv = '/Users/Project2021/Sites/CSVPHP/uploads';
+          $fh = fopen($csv, 'r');
+
+          if ($fh === false) {
+            die('Cannot open the file ' . $csv);
+            }
+
+          while(list($first_name,$surname, $email) = 
+          fgetcsv($fh, 1024,',')){
+            printf("<p>%s, %s, %s</p>", $first_name,$surname,$email);
+          }
+    }
+  
