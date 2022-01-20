@@ -88,6 +88,11 @@ https://github.com/realpratik/PHP_task-1and2.git
 -->
 
 
+
+
+
+
+
     <!-- // $filename = 'users.csv';
     // $data = [];
 
@@ -106,125 +111,54 @@ https://github.com/realpratik/PHP_task-1and2.git
     // // close the file
     // // fclose($f); -->
  
-    <form action="" method="post" enctype="multipart/form-data">
+
+
+
+          <form action="" method="post" enctype="multipart/form-data">
               Upload File:
               <input type="file" name="f1">
               <br><br>
               <input type="submit" name="submit">
           </form>
 
-
   <?php
-
-$csv = '/Users/Project2021/Sites/CSVPHP/uploads/users.csv';
-
-
-$fh = fopen($csv, 'r');
-if($_POST){
-if ($fh === false) {
-       die('Cannot open the file ' . $csv);
-} else {      
-  while(($row = fgetcsv($fh)) !== false) {
-          $data[] = $row;
-          $first_name = $row['0'];
-          $surname = $row['1'];
-          $email = $row['2'];
-
-      } 
+  //   // $csv = '/Users/Project2021/Sites/CSVPHP/users.csv';
+  
 
 
+    if($_POST){
+      $file_name = $_FILES['f1']['name'];
+      $file_tmp = $_FILES['f1']['tmp_name'];
+      $dir = "uploads/"; // directory to save image
+      $merge = $dir.$file_name; // location and name of image
+      move_uploaded_file($file_tmp, $merge);
 
+          $fh = fopen($merge, 'r');
 
-
-
-
-
-
-
-
-                      
-                  $DB_HOST = "localhost";
-                  $DB_USER = "root";
-                  $DB_PASSWORD = "root";
-                  $DB_DB = "";
-                  
-
-                  $con = mysqli_connect($DB_HOST,$DB_USER,$DB_PASSWORD,$DB_DB);
-                  $qdb =  "CREATE DATABASE nayak";
-
-                  if(mysqli_query($con,$qdb)){
-                    echo "db created"; 
-                  } else {
-                    echo "Error creating database: " . mysqli_error($con) . "<br>";
-
-                  }
-
-                  mysqli_select_db($con,"nayak");
-
-                  // Check connection
-                  if (!$con) {
-                      die("Connection failed: " . mysqli_connect_error());
-                  }    
-
-                  $qtd =   "CREATE TABLE users(
-                        UserId int,
-                        FirstName varchar(255) ,
-                        LastName varchar(255),
-                        Email varchar(255)
-                        )";
-
-                  if(mysqli_query($con,$qtd)){
-                      echo "tables created now";
-                  } else {
-                    echo "Error creating table: " . mysqli_error($con). "<br>";
-
-                  }
-                    
-                    
-                  
-
-                  
-
-                  
-                    //   $qins =  "INSERT INTO users(firstname,surname,email) VALUE ('$first_name','$surname', '$email')";
-                  
-                        
-
-                  
-
-                    // // while(list($first_name,$surname, $email) = fgetcsv($fh)){
-                    // //   //   printf("<p>%s, %s, %s</p>", $first_name,$surname,$email);
-                    // //   // }
-
-
-                    
-
-                
-
-                  $csv = '/Users/Project2021/Sites/CSVPHP/uploads/users.csv';
-
-
-                  $fh = fopen($csv, 'r');
-
-                  if ($fh === false) {
-                        die('Cannot open the file ' . $csv);
-                  } else {      
-                    while(($row = fgetcsv($fh)) !== false) {
-                            $data[] = $row;
-                            $first_name = $row['0'];
-                            $surname = $row['1'];
-                            $email = $row['2'];
-                  
-                        } 
-
-                }
-
-
-
-            while (($row = fgetcsv($fh)) !== false) {
-                $data[] = $row;
-                print $data['name'];
+          if ($fh === false) {
+            die('Cannot open the file ' . $csv);
             }
-    }
 
-}
+          while(list($first_name,$surname, $email) = fgetcsv($fh)){
+            printf("<p>%s, %s, %s</p>", $first_name,$surname,$email);
+          }
+
+          // while (($row = fgetcsv($fh)) !== false) {
+          //      $data[] = $row;
+          //      print $data['name'];
+          // }
+  
+  }
+
+
+
+// echo $argc;
+
+// unset($argv[0]);
+
+// echo md5(implode(' ',$argv)), "\n";
+
+// // print_r($argv);
+
+
+
