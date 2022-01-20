@@ -9,7 +9,7 @@ Create a PHP script, that is executed from the command line, which accepts a CSV
   data is to be inserted into a MySQL database. A CSV file is provided as part of this task 
   that contains test data, the script must be able to process this file appropriately.
 
-
+ 
 
 The PHP script will need to correctly handle the following criteria:
 • CSV file will contain user data and have three columns: name, surname, email (see table 
@@ -116,78 +116,133 @@ https://github.com/realpratik/PHP_task-1and2.git
 
   <?php
 
-$csv = '/Users/Project2021/Sites/CSVPHP/uploads/users.csv';
-
-
-$fh = fopen($csv, 'r');
 if($_POST){
-if ($fh === false) {
-       die('Cannot open the file ' . $csv);
-} else {      
-  while(($row = fgetcsv($fh)) !== false) {
-          $data[] = $row;
-          $first_name = $row['0'];
-          $surname = $row['1'];
-          $email = $row['2'];
+              
+      $DB_HOST = "localhost";
+      $DB_USER = "root";
+      $DB_PASSWORD = "root";
+      $DB_DB = "";
+      
 
-      } 
+      $con = mysqli_connect($DB_HOST,$DB_USER,$DB_PASSWORD,$DB_DB);
+      $qdb =  "CREATE DATABASE ginger";
+
+      if(mysqli_query($con,$qdb)){
+        echo "db created" . "</br>"; 
+      } else {
+        echo "Error creating database: " . mysqli_error($con) . "<br>";
+
+      }
+
+      mysqli_select_db($con,"ginger");
+
+      // Check connection
+      if (!$con) {
+        die("Connection failed: " . mysqli_connect_error());
+      }    
+
+      $qtd =   "CREATE TABLE users (
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            FirstName varchar(255) NOT NULL,
+            LastName varchar(255) NOT NULL,
+            Email varchar(255) NOT NULL
+            )";
+
+      if(mysqli_query($con,$qtd)){
+          echo "tables created now";
+      } else {
+        echo "Error creating table: " . mysqli_error($con). "<br>";
+      }
+        
+
+
+
+      $file_name = $_FILES['f1']['name'];
+      $file_tmp = $_FILES['f1']['tmp_name'];
+      $dir = "uploads/"; // directory to save image
+      $merge = $dir.$file_name; // location and name of image
+      move_uploaded_file($file_tmp, $merge);
+  
+      $fh = fopen($merge, 'r');
+  
+      // if ($fh === false) {
+      //   die('Cannot open the file ' . $csv);
+      // }
+  
+      // // while(list($first_name,$surname, $email) = fgetcsv($fh)){
+      // //   printf("<p>%s, %s, %s</p>", $first_name,$surname,$email);
+        
+      // // }
+  
+      //   //$csv = '/Users/Project2021/Sites/CSVPHP/uploads/users.csv';
+  
+      //   while(($row = fgetcsv($fh)) !== false) {
+      //   $data[] = $row;
+      
+  
+      //   $first_name = $row['0'];
+      //   $surname = $row['1'];
+      //   $email = $row['2'];
+      //   // $email = $row['$i'];
+      //   // echo $length;
+      //   // for($i=0; $i < $length; $i++){
+      //   // // $first_name = $row['$i'];
+      //   // // $surname = $row['$i'];
+      //   // // $email = $row['$i'];
+      //   // // $email = $row['$i'];
+  
+      //    }
+  
+         
+        //pwd
+         $row = 1;
+         if ($fh !== FALSE) {
+             while (($data = fgetcsv($fh, 1000, ",")) !== FALSE) {
+              //  var_dump ($data);
+                 // $num = count($data);
+                //  echo "<p> $num fields in line $row: <br /></p>\n";
+                //  $row++;
+                // for ($c=0; $c < $num; $c++) {
+                //  foreach($results[$data] as $result){
+                    //  $result[$name] . "<br />"; 
+                    $first_name =  $data['0']; 
+                    $surname =  $data['1'];
+                    $email =  $data['2'];
+                    //$id = [$c];
+                
+                //      $first_name = $key[$c];
+                //      $surname = $key[$c][$row];
+                //      $email = $key[$c][$row];
+  
+                     $qins = "INSERT INTO users(FirstName,LastName,Email) VALUES ('$first_name','$surname', '$email')";
+           
+        
+                     if(mysqli_query($con,$qins)){
+                       echo "data inserted";
+                     } else {
+                       echo "Error creating table: " . mysqli_error($con). "<br>";
+                     }
+                 //}
+             }  
+            //       }
+            //  }
+             
+         }
+         
+  
 
 
 
 
 
-
-
-
-
-
-
-                      
-                  $DB_HOST = "localhost";
-                  $DB_USER = "root";
-                  $DB_PASSWORD = "root";
-                  $DB_DB = "";
-                  
-
-                  $con = mysqli_connect($DB_HOST,$DB_USER,$DB_PASSWORD,$DB_DB);
-                  $qdb =  "CREATE DATABASE nayak";
-
-                  if(mysqli_query($con,$qdb)){
-                    echo "db created"; 
-                  } else {
-                    echo "Error creating database: " . mysqli_error($con) . "<br>";
-
-                  }
-
-                  mysqli_select_db($con,"nayak");
-
-                  // Check connection
-                  if (!$con) {
-                      die("Connection failed: " . mysqli_connect_error());
-                  }    
-
-                  $qtd =   "CREATE TABLE users(
-                        UserId int,
-                        FirstName varchar(255) ,
-                        LastName varchar(255),
-                        Email varchar(255)
-                        )";
-
-                  if(mysqli_query($con,$qtd)){
-                      echo "tables created now";
-                  } else {
-                    echo "Error creating table: " . mysqli_error($con). "<br>";
-
-                  }
-                    
-                    
-                  
-
-                  
-
-                  
-                    //   $qins =  "INSERT INTO users(firstname,surname,email) VALUE ('$first_name','$surname', '$email')";
-                  
+      // $qins = "INSERT INTO users(UserId,FirstName,LastName,Email) VALUES ('1','$first_name','$surname', '$email')";
+         
+      
+      // if(mysqli_query($con,$qins)){
+      //   echo "data inserted";
+      // } else {
+      //   echo "Error creating table: " . mysqli_error($con). "<br>";
+      // }
                         
 
                   
@@ -195,36 +250,8 @@ if ($fh === false) {
                     // // while(list($first_name,$surname, $email) = fgetcsv($fh)){
                     // //   //   printf("<p>%s, %s, %s</p>", $first_name,$surname,$email);
                     // //   // }
-
-
-                    
-
-                
-
-                  $csv = '/Users/Project2021/Sites/CSVPHP/uploads/users.csv';
-
-
-                  $fh = fopen($csv, 'r');
-
-                  if ($fh === false) {
-                        die('Cannot open the file ' . $csv);
-                  } else {      
-                    while(($row = fgetcsv($fh)) !== false) {
-                            $data[] = $row;
-                            $first_name = $row['0'];
-                            $surname = $row['1'];
-                            $email = $row['2'];
-                  
-                        } 
-
-                }
-
-
-
-            while (($row = fgetcsv($fh)) !== false) {
-                $data[] = $row;
-                print $data['name'];
-            }
-    }
-
+  fclose($fh);
 }
+
+
+?>
