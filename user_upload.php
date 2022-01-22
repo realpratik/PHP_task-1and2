@@ -1,12 +1,4 @@
-
-
-
-<!--
-
-
-
-1. Script Task
-
+<!--    Task
 
 
   Create a PHP script, that is executed from the command line, which accepts a CSV file
@@ -88,10 +80,7 @@
 
 
 https://github.com/realpratik/PHP_task-1and2.git
-
-
 -->
-
 
 <form action="" method="post" enctype="multipart/form-data">
     Upload File:
@@ -102,17 +91,16 @@ https://github.com/realpratik/PHP_task-1and2.git
 
 <?php
 
-  if($_POST){
-              
+  if($_POST){          
       $DB_HOST = "localhost";
       $DB_USER = "root";
       $DB_PASSWORD = "root";
-      $DB_DB = "";
+      $DB_DB = "rat";
       
-
-      $con = mysqli_connect($DB_HOST,$DB_USER,$DB_PASSWORD,$DB_DB);
+      //connection
+      $con = mysqli_connect($DB_HOST,$DB_USER,$DB_PASSWORD);
       
-      $qdb =  "CREATE DATABASE php_task";
+      $qdb =  "CREATE DATABASE $DB_DB";
 
       if(mysqli_query($con,$qdb)){
         echo "db created" . "</br>"; 
@@ -121,7 +109,7 @@ https://github.com/realpratik/PHP_task-1and2.git
 
       }
 
-      mysqli_select_db($con,"php_task");
+      mysqli_select_db($con,$DB_DB);
 
       // Check connection
       if (!$con) {
@@ -148,76 +136,47 @@ https://github.com/realpratik/PHP_task-1and2.git
       move_uploaded_file($file_tmp, $merge);
   
       $fh = fopen($merge, 'r');
+      fgetcsv($fh);
   
         if ($fh !== FALSE) {
-            while (($data = fgetcsv($fh, 1000, ",")) !== FALSE) {
+          while (($data = fgetcsv($fh, 1000, ",")) !== FALSE) {
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$data['0'])) {
+              echo "Only letters and white space allowed" ."<br>";
+            } else {
+              $first_name =  ucfirst(strtolower($data['0'])); 
+            }
 
-                // $filename = 'users.csv';
-                // $data = [];
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$data['1'])) {
+              echo "Only letters and white space allowed";
+              echo "</br>";
+            } else {
+              $surname =  ucfirst(strtolower($data['1']));
+            }
+                              
             
-                // // open the file
-                // $f = fopen($filename, 'r');
-            
-                // if ($f === false) {
-                //   die('Cannot open the file ' . $filename);
-                // }
-            
-                // // read each line in CSV file at a time
-                // while (($row = fgetcsv($f)) !== false) {
-                //   $data[] = $row;
-                // }
-            
-                // // close the file
-                // // fclose($f); -->
-            
-                  //  var_dump ($data);
-                  // $num = count($data);
-                  //  echo "<p> $num fields in line $row: <br /></p>\n";
-                  //  $row++;
-                  // for ($c=0; $c < $num; $c++) {
-                  //  foreach($results[$data] as $result){
-                  //  $result[$name] . "<br />";
-                  
-                  // $first_name = preg_match("/^[a-zA-Z]{3,20}$/", $data['0']);
-                  // $surname = preg_match("/^[a-zA-Z]{3,20}$/", $data['1']);
-                
-                  if (!preg_match("/^[a-zA-Z-' ]*$/",$data['0'])) {
-                    echo "Only letters and white space allowed" ."<br>";
-                  } else {
-                    $first_name =  ucfirst(strtolower($data['0'])); 
-                  }
+            $email = $data['2'];
+            if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+              echo "Invalid email format.";
+              echo "</br>";
+              
+            } else {
+                $email =  strtolower($email);
+        
+                $qins = "INSERT INTO users(FirstName,LastName,Email) VALUES ('$first_name','$surname', '$email')";       
 
-                  if (!preg_match("/^[a-zA-Z-' ]*$/",$data['1'])) {
-                    echo "Only letters and white space allowed";
-                    echo "</br>";
-                  } else {
-                    $surname =  ucfirst(strtolower($data['1']));
-                  }
-                                   
-                  
-                  $email = $data['2'];
-                  if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
-                    echo "Invalid email format.";
-                    echo "</br>";
-                    
-                  } else {
-                      $email =  strtolower($email);
-                  
-                      $qins = "INSERT INTO users(FirstName,LastName,Email) VALUES ('$first_name','$surname', '$email')";       
-
-                      if(mysqli_query($con,$qins)){
-                        echo "Data inserted in the table";
-                        echo "</br>";
-                      } else {
-                        echo "Error creating table: " . mysqli_error($con);
-                        echo "</br>";
-                      }
+                if(mysqli_query($con,$qins)){
+                  echo "Data inserted in the table";
+                  echo "</br>";
+                } else {
+                  echo "Error creating table: " . mysqli_error($con);
+                  echo "</br>";
+                }
 
                   }
             }           
         }
-         
+        fclose($fh);
   }
-  fclose($fh);
+
 
 ?>
