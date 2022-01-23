@@ -25,18 +25,14 @@ class Zebra {
             echo "db created" . "</br>"; 
           } else {
             echo "Error creating database: " . mysqli_error($this->con) . "<br>";
-
           }
-
       }
 
     function conndb($db){
       mysqli_select_db($this->con,$db);
-
     }
 
     function createtable(){
-
         $qtd =   "CREATE TABLE users (
               id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
               FirstName varchar(255) NOT NULL,

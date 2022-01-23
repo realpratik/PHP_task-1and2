@@ -25,8 +25,8 @@ if($_POST){
 
       $file_name = $_FILES['f1']['name'];
       $file_tmp = $_FILES['f1']['tmp_name'];
-      $dir = "uploads/"; // directory to save image
-      $merge = $dir.$file_name; // location and name of image
+      $dir = "uploads/";
+      $merge = $dir.$file_name; 
       move_uploaded_file($file_tmp, $merge);
   
       $fh = fopen($merge, 'r');

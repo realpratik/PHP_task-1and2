@@ -129,11 +129,15 @@ https://github.com/realpratik/PHP_task-1and2.git
         echo "Error creating table: " . mysqli_error($con) . "<br>";
       }
         
-      $file_name = $_FILES['f1']['name'];
-      $file_tmp = $_FILES['f1']['tmp_name'];
-      $dir = "uploads/"; // directory to save image
-      $merge = $dir.$file_name; // location and name of image
-      move_uploaded_file($file_tmp, $merge);
+
+      //If file is loaded via form above
+            // $file_name = $_FILES['f1']['name'];
+            // $file_tmp = $_FILES['f1']['tmp_name'];
+            // $dir = "uploads/"; // directory to save image
+            // $merge = $dir.$file_name; // location and name of image
+            // move_uploaded_file($file_tmp, $merge);
+
+      $merge = "uploads/users.csv";
   
       $fh = fopen($merge, 'r');
       fgetcsv($fh);

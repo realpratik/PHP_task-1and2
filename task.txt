@@ -74,14 +74,7 @@
       Questions on “how to do it” won't be accepted.
         
 
-
-
-
-
-        
-
-
-      . Logic Test
+Task 2 . Logic Test
       Create a PHP script that is executed from the command line. The script should:
       • Output the numbers from 1 to 100
       • Where the number is divisible by three (3) output the word “foo”
@@ -101,7 +94,7 @@
       be accepted.
 
 
-
+////****************************************************************///////////////////////////
 Workings:
 
 
@@ -215,3 +208,17 @@ Put a file named composer.json at the root of your package's repository, contain
         "another-vendor/package": "1.*"
     }
 }
+
+
+
+
+/  fopen("uploads/users.csv", "r");
+//  fopen("php://stdout", "w");
+// fopen("php://stderr", "w");
+
+// file_put_contents('php://stdout', 'This is stdout content');
+// file_put_contents('php://stderr', 'This is stderr content');
+
+
+
+//  $fh = fopen("users.csv", 'r');
