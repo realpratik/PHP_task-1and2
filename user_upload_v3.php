@@ -43,11 +43,6 @@
         //  fclose($fh);
 
 
-
-
-
-        
-
         // if ($fh !== FALSE) {
         while (($data = fgetcsv($fh, 1000, ",")) !== FALSE) {
             if (!preg_match("/^[a-zA-Z-' ]*$/",$data['0'])) {
@@ -81,7 +76,7 @@
                   echo "Error creating table: " . mysqli_error($con);
                   echo "</br>";
                 }
-              }
+            }
         }
                 
             fclose($fh);

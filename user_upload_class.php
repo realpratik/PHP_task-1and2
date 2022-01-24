@@ -2,70 +2,109 @@
 
 require 'vendor/autoload.php';
 
-include "src/myclass.php";
+require "src/myclass.php";
 
-?>
 
-<form action="" method="post" enctype="multipart/form-data">
-    Upload File:
-    <input type="file" name="f1">
-    <br><br>
-    <input type="submit" name="submit">
-</form>
 
-<?php
+ $filename = "uploads/users.csv";
+// $filename = "example.txt";
 
-if($_POST){
-      $obj = new Acme\Zebra("localhost","root","root");
-      $db = "cow"; //change db name here
-    
-      $obj->createdb($db);
-      $obj->conndb($db);
-      $obj->createtable();
+  $fh = (fopen($filename, 'r'));
 
-      $file_name = $_FILES['f1']['name'];
-      $file_tmp = $_FILES['f1']['tmp_name'];
-      $dir = "uploads/";
-      $merge = $dir.$file_name; 
-      move_uploaded_file($file_tmp, $merge);
-  
-      $fh = fopen($merge, 'r');
-      fgetcsv($fh);
-  
-      if ($fh !== FALSE) {
-          while (($data = fgetcsv($fh, 1000, ",")) !== FALSE) {
-              if (!preg_match("/^[a-zA-Z-' ]*$/",$data['0'])) {
-                echo "Only letters and white space allowed" ."<br>";
-              } else {
-                $first_name =  ucfirst(strtolower($data['0'])); 
-              }
-
-              if (!preg_match("/^[a-zA-Z-' ]*$/",$data['1'])) {
-                echo "Only letters and white space allowed";
-                echo "</br>";
-              } else {
-                $surname =  ucfirst(strtolower($data['1']));
-              }
-                                
+    if($fh == false) {
+        echo ("Error in reading file");
+        exit();
+      } else {
               
-              $email = $data['2'];
-              if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
-                echo "Invalid email format.";
-                echo "</br>";
-                
-              } else {
-                  $email =  strtolower($email);
+            // $obj = new Acme\Zebra("127.0.0.1","root","root");
 
-                  $obj = new Acme\Zebra("localhost","root","root");
-                  $obj->conndb($db);
+            // $obj = new Acme\Zebra("127.0.0.1",'$username','$password');
 
-                  $obj->insertdata($first_name,$surname,$email);
+            echo "\n enter database name:\n";
+            $handle = fopen("php://stdin","r"); //input stream         
+            $db = fgets($handle);
 
-              }
-          }           
+
+
+            echo "\n enter user name:\n";
+            $handle = fopen("php://stdin","r"); //input stream         
+            $username1 = fgets($handle);
+
+
+
+            // echo "\n enter password:\n";
+            // $handle = fopen("php://stdin","r"); //input stream         
+            // $password1 = fgets($handle);
+
+
+
+            $obj = new Acme\Zebra("127.0.0.1",$username1,'root');
+          
+            $obj->createdb($db); /// check why db is not 
+
+ 
+            $obj->conndb($db);
+            // $obj = new Acme\Zebra("127.0.0.1","root","root");
+            // mysqli_connect("127.0.0.1",$username1,$password1);
+
+            $obj->createtable($db);
+            
+            echo "\n Would you like to insert data: press 'y' for yes and 'n' for no;\n";        
+            $handle2 = fopen("php://stdin","r"); //input stream     
+            $userinput2 = fgets($handle2);
+
+
+            
+
+            do {
+
+                while (($data = fgetcsv($fh)) !== FALSE) 
+                {
+                    if (!preg_match("/^[a-zA-Z-' ]*$/",$data['0'])) {
+                      echo "Only letters and white space allowed" ."<br>";
+                    } else {
+                      $first_name =  ucfirst(strtolower($data['0'])); 
+                    }
+
+                    if (!preg_match("/^[a-zA-Z-' ]*$/",$data['1'])) {
+                      echo "Only letters and white space allowed";
+                      echo "</br>";
+                    } else {
+                      $surname =  ucfirst(strtolower($data['1']));
+                    }
+                          
+                    
+                    $email = $data['2'];
+                    if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+                      echo "Invalid email format.";
+                      echo "</br>";
+                      
+                    } else {
+                        
+
+                          
+                            
+                           
+                         $this->con = $con;   
+                          
+                      
+                          $email =  strtolower($email);
+        
+                          $qins = "INSERT INTO users(FirstName,LastName,Email) VALUES ('$first_name','$surname', '$email')";       
+          
+                          if(mysqli_query($this->con,$qins)){
+                            echo "Data inserted in the table";
+                            echo "</br>";
+                          } else {
+                            echo "Error creating table: " . mysqli_error($con);
+                            echo "</br>";
+                        
+                          }
+                      }   
+                }  
+                  
+            }while($userinput = "y");
       }
+
   fclose($fh);
-}
-
-
 ?>

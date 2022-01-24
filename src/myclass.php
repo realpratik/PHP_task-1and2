@@ -9,12 +9,13 @@ class Zebra {
   public $db;
   public $con;
 
-  function __construct($host, $username, $password){
+  public function __construct($host, $username, $password){
     $this->host = $host;
     $this->username = $username;
     $this->password = $password;
-    //$this->db = $db;
-    $this->con = mysqli_connect($this->host,$this->username,$this->password);
+    // $this->db = $db;
+  $this->con = mysqli_connect($this->host,$this->username,$this->password);
+    // $this->con = mysqli_connect($this->host,$this->username,$this->password,$this->db);
   }
 
 
@@ -33,17 +34,19 @@ class Zebra {
     }
 
     function createtable(){
-        $qtd =   "CREATE TABLE users (
+        $qtd =   " CREATE TABLE users (
               id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
               FirstName varchar(255) NOT NULL,
               LastName varchar(255) NOT NULL,
               Email varchar(255) NOT NULL
               )";
 
+          
+
         if(mysqli_query($this->con,$qtd)){
-            echo "tables created now" ."</br>";
+            echo "table created" ."</br>";
         } else {
-            echo "error creating table" . "</br";
+            echo "error creating table" . mysqli_error($this->con) ."</br";
 
         }
   
